@@ -11,6 +11,6 @@ public class HomeController {
 	@GetMapping("/")
 	public String goHome() {
 		log.info("goHome 실행됨 - 메인화면");
-		return "index";
+		return "main";
 	}
 }
