@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="MsgMapper">
+  
+  		<!--  DB에 값이 int로 저장되어 있어서 서브쿼리로 닉네임 받고 Map으로 처리해야됨 -->
+  		<select id="messageList" parameterType="int" resultType="MsgVO">
+  			select m_id,users.id,(select nickname from users where id=receiver) as receiver,
+	  		(select nickname from users where id=sender) as sender,m_date,m_text 
+	  		from users_message inner join users on users.id=users_message.id and users.id=#{id}
+	  		order by m_id desc;
+  		</select>
+	  	<select id="receiveMessageList" parameterType="int" resultType="MsgVO">
+	  		select m_id,users.id,(select nickname from users where id=receiver) as receiver,
+	  		(select nickname from users where id=sender) as sender,m_date,m_text 
+	  		from users_message inner join users on users.id=users_message.id and users_message.receiver=#{id}
+	  		order by m_id desc;
+	  	</select>
+	  	<select id="senderMessageList" parameterType="int" resultType="MsgVO">
+  			select m_id,users.id,(select nickname from users where id=receiver) as receiver,
+	  		(select nickname from users where id=sender) as sender,m_date,m_text 
+	  		from users_message inner join users on users.id=users_message.id and users_message.sender=#{id}
+	  		order by m_id desc;
+  		</select>
+  		
+  		<delete id="deleteMessage" parameterType="int" >
+  			delete from	users_message
+  			where
+  			m_id=${m_id}
+  		</delete>
+
+  		<insert id="insertMessage" parameterType="com.example.users.dbMessage" >
+  			insert into users_message (id,receiver,sender,m_date,m_text)
+  			values(#{id},#{receiver},#{sender},#{m_date},#{m_text})
+  		</insert>
+  </mapper>

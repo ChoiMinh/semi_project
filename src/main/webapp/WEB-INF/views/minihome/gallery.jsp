@@ -4,10 +4,130 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="jakarta.servlet.http.Cookie" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<title>미니홈</title>
+<style>
+@font-face {
+    font-family: 'Happy_dobi';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/naverfont_05@1.0/Happy_dobi.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+.album .album_title{
+	border-left:none;
+	border-right:none;
+	border-bottom:none;
+	border-top:1px solid gray;
+}
+.album .album_title:nth-child(n+2){
+	margin-top:70px;
+}
+
+.album_title{
+	position:relative;
+	font-size:19px;
+	text-align:center;
+	background-color:#E2E2E2;
+	margin-top:5px;
+	margin-left :17px;
+	border:1px solid black;
+	width:674px;
+	height:33px;
+	text-align:center;
+}
+
+.album_picture{
+	text-align:center;
+	margin-top:5px;
+	margin-left :5px;
+	width:690px;
+	height:300px;
+}
+
+.album_img{
+	width:650px;
+	height:310px;
+}
+
+.album_content{
+	font-family:'Happy_dobi';
+	font-size:55px;
+	color:black;
+	padding-left:30px;
+}
+.album_delete{
+	position:absolute;
+	left:620px;
+	top:4px;
+	background-color:gray;
+	border-radius:5px;
+	color:white
+}
+.album_delete:hover{
+	background-color:red;
+}
+  .menu-button:first-child{
+  	position: absolute;
+    left: 1182px;
+    margin-top: 3rem;
+  }
+</style>
+<script>
+album_list();
+let commentIndex=0;
+function doGet(url){
+	const xhr=new XMLHttpRequest();
+	xhr.onload=function(){
+		data=JSON.parse(xhr.response);
+		console.dir(JSON.parse(xhr.response));
+		makeComponent(data);
+	}
+	xhr.open("GET","http://localhost:8099/"+url,true);
+	xhr.send();
+}
+
+function album_list(){
+	doGet("album/list.do");
+}
+
+function album_delete(btn){
+	doGet("album/delete.do?seq="+btn.dataset.seq);
+	history.go(0);
+}
+
+
+function makeComponent(d){
+let container=document.querySelector(".album");
+container.innerHTML="";
+for(let i=0;i<d.length;i++){
+	container.innerHTML+=`
+		<div class="album_title">\${d[i].title}<button class="album_delete" data-seq="\${d[i].seq}" onclick="album_delete(this)">삭제</button></div>
+		<div class="album_picture"><img class="album_img" src='\${d[i].album}' width="50px" height="50px"></div>
+		<div class="album_content">\${d[i].content}</div>
+		<div class="album_comment"></div>
+	`;
+	}
+}
+/*
+ function userPhotoChange(){
+		let imgInput=document.getElementById('album');
+		let nameIndex=img.src.indexOf(".jpg")-1;
+		nameIndex=parseInt(img.src.charAt(nameIndex))+1;
+		
+		if(nameIndex==6) nameIndex=1;
+		let imgURL="images/album/"+nameIndex+".jpg";
+		img.src=imgURL;
+		imgInput.value=imgURL;
+	}
+ }
+ */
+</script>
+<link rel="stylesheet" href="css/comment/style.css">
    <link rel="stylesheet" href="css/minihome/font.css" />
     <link rel="stylesheet" href="css/minihome/layout.css" />
     <link rel="stylesheet" href="css/minihome/home.css" />
@@ -113,57 +233,16 @@
               <div class="content-title-url"> https://url주소/나중에입력 </div>
             </div>
             <div class="box content-box">
-              <div class="box-title"> Updated News </div>
-              <div class="news-flex-box">
-                <div class="news-box">
-                  <div class="news-row">
-                    <div class="news-category category-pic"> 사진첩 </div>
-                    <div class="news-title"> 일상...♥ </div>
-                  </div>
-                  <div class="news-row">
-                    <div class="news-category category-post"> 게시판 </div>
-                    <div class="news-title"> 프로젝트 T.T </div>
-                  </div>
-                  <div class="news-row">
-                    <div class="news-category category-post"> 게시판 </div>
-                    <div class="news-title"> 이게 맞나... =_= </div>
-                  </div>
-                  <div class="news-row">
-                    <div class="news-category category-pic"> 사진첩 </div>
-                    <div class="news-title"> 조 모임 ^0^ </div>
-                  </div>
-                </div>
-                <div class="update-box">
-                  <div class="menu-row">
-                    <div class="menu-item"> 게시판 <span class="menu-num"> 0/25 </span></div>
-                    <div class="menu-item"> 사진첩 <span class="menu-num"> 0/25 </span></div>
-                  </div>
-                  
-                  <!-- BGM -->
-            <div class="small-frames-contatiner">
-               <div class="small-frame">
-                  <div class="small-frame-title"> 🎧 BGM PLAYER 🎧 </div>
-                  <audio id="audioPlayer" controls style="width: 250px; height: 30px;">
-                     <source src="bgm/test.mp3" type="audio/mp3">
-                     <source src="bgm/test2.mp3" type="audio/mp3">
-                     <source src="bgm/test3.mp3" type="audio/mp3">
-                     현재 브라우저가 노래재생기능을 지원하지 않습니다.
-                     </audio>
-                  <div class="play">
-                     <button onclick="playSong('bgm/test.mp3')">⏪</button>
-                     <button onclick="playSong('bgm/test2.mp3')">⏯️</button>
-                     <button onclick="playSong('bgm/test3.mp3')">⏩</button>
-                  </div>
-               </div>
-            </div>
-                </div>
-              </div>
+              
+               
              
               <div class="miniroom">
-                <div class="box-title"> Miniroom </div>
+                <div class="box-title"> GALLERY </div>
                 <div class="miniroom-gif-box">
                    <!-- 사진 출처 : https://lrl.kr/gyqJ -->
-                  <img src="images/minihome/y.png" alt="미니룸" />
+                 <div class="album">
+                 </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -177,7 +256,7 @@
           </div>
         </div>
       </div>
-
+    </div>
 
     <script>
         function fetchWeather() {
@@ -204,5 +283,23 @@
         setInterval(fetchTime, 1000); // 1초마다 시간 업데이트
         fetchWeather(); // 페이지 로드 시 날씨 데이터 가져오기
     </script>
+<!-- 
+    <script src="/javascript/comment.js"></script>
+    <script>
+        document.getElementById('likeButton').addEventListener('click', function() {
+            var likeCountSpan = document.getElementById('likeCount');
+            var likeCount = parseInt(likeCountSpan.textContent);
+            likeCount++;
+            likeCountSpan.textContent = likeCount;
+
+            // AJAX 요청 보내기
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/comment/like', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ likeCount: likeCount }));
+        });
+         -->
+    </script>
+
 </body>
 </html>

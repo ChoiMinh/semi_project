@@ -5,19 +5,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script>
+	function updateClock() {
+	    var now = new Date();
+	    var hours = now.getHours();
+	    var minutes = now.getMinutes();
+	    var seconds = now.getSeconds();
+	    var ampm = hours >= 12 ? 'PM' : 'AM';
+	    
+	    var year = now.getFullYear();
+	    var month = now.getMonth() + 1;
+	    var date = now.getDate();
+	    
+	    
+	    hours = hours % 12;
+	    hours = hours ? hours : 12;
+	    
+	    hours = hours < 10 ? '0' + hours : hours;
+	    minutes = minutes < 10 ? '0' + minutes : minutes;
+	    seconds = seconds < 10 ? '0' + seconds : seconds;
+	
+	    var timeString = hours + ':' + minutes + ':' + seconds;
+	    var dateString = year + "년 " + month + "월 " + date + "일";
+	    document.getElementById('clock-time').innerText = timeString;
+	    document.getElementById('clock-ampm').innerText = ampm;
+	    document.getElementById('clock-date').innerText = dateString;
+	}
+	
+	setInterval(updateClock, 1000);
+	window.onload = updateClock;
+    </script>
 </head>
 <body>
 	<div id="time">
-		<form id="weather">
-			날씨 :
-			<br />
-			시간 : <%
-	                java.time.LocalDateTime now = java.time.LocalDateTime.now();
-	                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	                String formattedNow = now.format(formatter);
-	                out.print(formattedNow);
-	              %>
-		</form>
+		<div class="clock-container">
+	        <span class="clock-ampm" id="clock-ampm"></span>
+	        <span class="clock-time" id="clock-time"></span>
+	        <div class="clock-date" id="clock-date"></div>
+	    </div>
 	</div>
 </body>
-</html>

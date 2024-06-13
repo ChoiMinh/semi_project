@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="UserMapper">
+	<!-- 
+  	<resultMap id="userResultMap" type="UsersVO">
+		<id property="id" column="id" />
+		<result property="user_id" column="user_id" />
+		<result property="password" column="password" />
+		<result property="email" column="email" />
+	</resultMap>
+	 -->
+	<sql id="selectMain">
+		select * from users;
+	</sql>
+	
+	<select id="selectAll" resultType="UsersVO">
+			<include refid="selectMain" />
+	</select>
+	
+	<select id="selectUserByID" parameterType="int" resultType="UsersVO">
+		select * from users
+		where
+		id=#{id}
+	</select>
+	
+	<select id="selectUserByUserID" parameterType="String" resultType="UsersVO">
+		select * from users
+		where 
+		user_id = #{user_id}
+	</select>
+	
+	<select id="selectUserByNickname" parameterType="String" resultType="UsersVO">
+		select * from users
+		where 
+		nickname=#{nickname}
+	</select>	
+	
+	<select id="selectUserByNicknameAndEmail" parameterType="UsersVO" resultType="UsersVO">
+		select * from users
+		where 
+		nickname=#{nickname} and email=#{email}
+	</select>	
+  
+  	<insert id="insertUser" parameterType="UsersVO">
+  		insert into users(user_id,password,email,nickname,photo)
+  		values(#{user_id},#{password},#{email},#{nickname},#{photo})
+  	</insert>
+  	
+  	<update id="updateUserById" parameterType="UsersVO">
+  		update users 
+  		<set>
+  			<if test="password!='' and password!=null">
+  				password=#{password},
+  			</if>
+  			<if test="nickname!='' and nickname!=null">
+  				nickname=#{nickname},
+  			</if>
+  			<if test="photo!=''  and photo!=null">
+  				photo=#{photo},
+  			</if>
+  		</set>
+  		where 
+  		id=#{id}
+  	</update>
+  	
+  
+</mapper>
+
+

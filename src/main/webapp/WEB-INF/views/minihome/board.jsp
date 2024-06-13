@@ -8,6 +8,50 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>미니홈</title>
+	 <style type="text/css">
+    	.postObject > td {border-bottom: 1px solid lightgray;}
+    	#board { list-style : none; width: 100%; height:0%; vertical-align: top; text-align: center; border-collapse: collapse;}
+    	.boardHeader > th {border-top: 3px solid skyblue; border-bottom: 1px solid black;}
+    	  .menu-button:first-child{
+			  	position: absolute;
+			    left: 1182px;
+			    margin-top: 3rem;
+			  }
+    </style>
+    <script>
+    	//post prototype
+    	function Post(pid, name, author, datetime){
+    		this.pid = pid;
+    		this.name = name;
+    		this.author = author;
+    		this.datetime = datetime;
+    		
+    		this.generateObject = function(){
+    			let res = document.createElement("tr");
+    			res.className = "postObject";
+    			//res.setAttribute("class", "postObject");
+    			res.innerHTML = "<td>"+pid+"</td><td style = \"text-align:left\"><a href=post.jsp?pid="+pid+">"+name+"</a></td><td>"+author+"</td><td>"+datetime+"</td>";
+    		
+    			return res;
+    		}
+    	}
+    	
+    	var posts = [new Post(0, "이게 맞나... =_=", "일조짱", "2024/06/12"), new Post(1, "프로젝트 T.T", "일조짱", "2024/06/13")];
+    	
+    	var postObjects = [];
+    	function updateBoard(){
+    		let board = document.getElementById("board");
+    		
+    		for(let i = 0; i < postObjects.length; i+=1){
+    			board.removeChild(postObjects[i]);
+    		}
+    		postObjects = [];
+    		for(let i = posts.length-1; i >= 0; i-=1){
+    			board.appendChild(posts[i].generateObject());
+    		}
+    	}
+    </script>
    <link rel="stylesheet" href="css/minihome/font.css" />
     <link rel="stylesheet" href="css/minihome/layout.css" />
     <link rel="stylesheet" href="css/minihome/home.css" />
@@ -113,57 +157,18 @@
               <div class="content-title-url"> https://url주소/나중에입력 </div>
             </div>
             <div class="box content-box">
-              <div class="box-title"> Updated News </div>
-              <div class="news-flex-box">
-                <div class="news-box">
-                  <div class="news-row">
-                    <div class="news-category category-pic"> 사진첩 </div>
-                    <div class="news-title"> 일상...♥ </div>
-                  </div>
-                  <div class="news-row">
-                    <div class="news-category category-post"> 게시판 </div>
-                    <div class="news-title"> 프로젝트 T.T </div>
-                  </div>
-                  <div class="news-row">
-                    <div class="news-category category-post"> 게시판 </div>
-                    <div class="news-title"> 이게 맞나... =_= </div>
-                  </div>
-                  <div class="news-row">
-                    <div class="news-category category-pic"> 사진첩 </div>
-                    <div class="news-title"> 조 모임 ^0^ </div>
-                  </div>
-                </div>
-                <div class="update-box">
-                  <div class="menu-row">
-                    <div class="menu-item"> 게시판 <span class="menu-num"> 0/25 </span></div>
-                    <div class="menu-item"> 사진첩 <span class="menu-num"> 0/25 </span></div>
-                  </div>
-                  
-                  <!-- BGM -->
-            <div class="small-frames-contatiner">
-               <div class="small-frame">
-                  <div class="small-frame-title"> 🎧 BGM PLAYER 🎧 </div>
-                  <audio id="audioPlayer" controls style="width: 250px; height: 30px;">
-                     <source src="bgm/test.mp3" type="audio/mp3">
-                     <source src="bgm/test2.mp3" type="audio/mp3">
-                     <source src="bgm/test3.mp3" type="audio/mp3">
-                     현재 브라우저가 노래재생기능을 지원하지 않습니다.
-                     </audio>
-                  <div class="play">
-                     <button onclick="playSong('bgm/test.mp3')">⏪</button>
-                     <button onclick="playSong('bgm/test2.mp3')">⏯️</button>
-                     <button onclick="playSong('bgm/test3.mp3')">⏩</button>
-                  </div>
-               </div>
-            </div>
-                </div>
-              </div>
-             
               <div class="miniroom">
-                <div class="box-title"> Miniroom </div>
+                <div class="box-title">게시판 </div>
                 <div class="miniroom-gif-box">
                    <!-- 사진 출처 : https://lrl.kr/gyqJ -->
-                  <img src="images/minihome/y.png" alt="미니룸" />
+                   <table id = "board">
+                  	<tr class = "boardHeader"><th>번호</th><th style = "width:60%;">제목</th><th>작성자</th><th style = "width:20%">일시</th></tr>
+                  </table>
+                  <script>updateBoard();</script>
+                </div>
+                <div style = "text-align:right">
+                	<button style="border:1px solid black; background-color: lightgrey; text-align:center; vertical-align:bottom"><b>글쓰기</b></button>
+                </div>
                 </div>
               </div>
             </div>
@@ -177,7 +182,6 @@
           </div>
         </div>
       </div>
-
 
     <script>
         function fetchWeather() {

@@ -8,8 +8,6 @@
 </head>
 <body>
 	<!-- 인기글 / 사진 위치 -->
-	<div id="board">
-		<h1 align="center"> 인기글 / 사진 </h1>
-	</div>
+	<div id="board"> 인기글 / 사진 </div>
 </body>
 </html>
