@@ -1,4 +1,4 @@
-# Multicampus Semi-Project 1조 📚
+# 📚Multicampus Semi-Project 1조 
 
 ## 0. 권장 스펙 및 목차 
 
